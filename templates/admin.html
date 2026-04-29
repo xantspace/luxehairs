@@ -1,0 +1,231 @@
+{% extends 'base.html' %}
+{% block title %}Boutique Administration - LuxeHairs{% endblock %}
+
+{% block content %}
+<!-- Use standard site fonts from base.html -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<style>
+    .font-inter { font-family: 'Inter', sans-serif; }
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .font-outfit { font-family: 'Outfit', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .filled-icon { font-variation-settings: 'FILL' 1; }
+    
+    /* Site Colors Integration */
+    .admin-dashboard {
+        background-color: #f7f6f8;
+        color: #1C1A3A; /* luxe-navy */
+    }
+    .text-luxe-navy { color: #1C1A3A; }
+    .text-luxe-gold { color: #D4AF37; }
+    .bg-luxe-navy { background-color: #1C1A3A; }
+    .bg-luxe-gold { background-color: #D4AF37; }
+    .bg-luxe-gold\/10 { background-color: rgba(212, 175, 55, 0.1); }
+    .bg-luxe-gold\/5 { background-color: rgba(212, 175, 55, 0.05); }
+    .border-luxe-gold { border-color: #D4AF37; }
+</style>
+
+<div class="admin-dashboard font-inter min-h-screen flex">
+    <!-- SideNavBar (Same as admin_product_form) -->
+    <aside class="hidden lg:flex w-64 border-r border-[#e0dbe6] bg-white flex-col shrink-0">
+        <div class="p-6 flex flex-col h-full">
+            <div class="flex items-center gap-3 mb-10">
+                <div class="w-10 h-10 rounded-full bg-luxe-navy flex items-center justify-center text-luxe-gold shadow-lg shadow-luxe-navy/10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-luxe-navy text-base font-bold leading-none font-playfair">Boutique</h1>
+                    <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest mt-1">Admin Portal</p>
+                </div>
+            </div>
+            <nav class="flex flex-col gap-2 flex-1">
+                <a class="flex items-center gap-3 px-4 py-3 bg-luxe-navy text-luxe-gold rounded-xl shadow-lg shadow-luxe-navy/20 transition-all" href="#">
+                    <span class="material-symbols-outlined filled-icon">dashboard</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 text-gray-500 hover:bg-luxe-gold/5 rounded-xl transition-all group" href="{% url 'admin_inventory' %}">
+                    <span class="material-symbols-outlined group-hover:text-luxe-gold transition-colors">inventory_2</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Inventory</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 text-gray-500 hover:bg-luxe-gold/5 rounded-xl transition-all group" href="{% url 'admin_orders' %}">
+                    <span class="material-symbols-outlined group-hover:text-luxe-gold transition-colors">shopping_cart</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Orders</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 text-gray-500 hover:bg-luxe-gold/5 rounded-xl transition-all group" href="{% url 'admin_customers' %}">
+                    <span class="material-symbols-outlined group-hover:text-luxe-gold transition-colors">group</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Customers</span>
+                </a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-stone-100">
+                <a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:text-luxe-gold transition-all" href="{% url 'home' %}">
+                    <span class="material-symbols-outlined">storefront</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Store Front</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <!-- Header & Breadcrumbs -->
+        <div class="max-w-7xl mx-auto px-8 py-10">
+            <div class="flex flex-col gap-1 mb-8">
+                <div class="flex items-center gap-2 text-[10px] text-gray-400 uppercase tracking-widest font-black">
+                    <a class="hover:text-luxe-gold transition-colors" href="#">Admin</a>
+                    <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                    <span class="text-luxe-navy">Overview</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap justify-between items-center gap-4 mb-10">
+                <h2 class="text-luxe-navy text-4xl font-bold font-playfair tracking-tight">Boutique Management</h2>
+                <a href="{% url 'admin_product_add' %}" class="px-8 py-3 rounded-2xl bg-luxe-navy text-white text-[10px] font-black uppercase tracking-[0.2em] hover:bg-luxe-gold shadow-2xl shadow-luxe-navy/20 transition-all transform hover:-translate-y-1">
+                    + Add Creation
+                </a>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-stone-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Total Products</p>
+                    <h3 class="text-3xl font-playfair font-bold text-luxe-navy">{{ total_products }}</h3>
+                </div>
+                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-stone-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Featured Items</p>
+                    <h3 class="text-3xl font-playfair font-bold text-luxe-navy">{{ featured_count }}</h3>
+                </div>
+                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-stone-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Total Orders</p>
+                    <h3 class="text-3xl font-playfair font-bold text-luxe-navy">{{ total_orders }}</h3>
+                </div>
+                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-stone-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Buyers</p>
+                    <h3 class="text-3xl font-playfair font-bold text-luxe-navy">{{ total_users }}</h3>
+                </div>
+            </div>
+
+            <!-- Analytics Grid -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+                <!-- Revenue Overview -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-stone-100">
+                    <h4 class="font-playfair text-xl font-bold text-luxe-navy mb-6 border-b border-stone-50 pb-4 italic">Revenue Overview</h4>
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center p-4 bg-green-50/50 rounded-2xl">
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Total Revenue</p>
+                                <p class="text-2xl font-bold text-green-600 font-outfit">₦{{ total_revenue|floatformat:0 }}</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-green-600 filled-icon">trending_up</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-amber-50/50 rounded-2xl">
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Pending Orders Value</p>
+                                <p class="text-2xl font-bold text-amber-600 font-outfit">₦{{ pending_revenue|floatformat:0 }}</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-amber-100 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-amber-600 filled-icon">schedule</span>
+                            </div>
+                        </div>
+                        <div class="flex justify-between items-center p-4 bg-blue-50/50 rounded-2xl">
+                            <div>
+                                <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-1">Average Order Value</p>
+                                <p class="text-2xl font-bold text-blue-600 font-outfit">₦{{ average_order_value|floatformat:0 }}</p>
+                            </div>
+                            <div class="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-blue-600 filled-icon">payments</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Order Status Breakdown -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-stone-100">
+                    <h4 class="font-playfair text-xl font-bold text-luxe-navy mb-6 border-b border-stone-50 pb-4 italic">Order Status</h4>
+                    <div class="space-y-4">
+                        <div class="flex items-center justify-between p-4 bg-amber-50/30 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-amber-500"></div>
+                                <span class="text-xs font-bold text-luxe-navy uppercase tracking-widest">Pending</span>
+                            </div>
+                            <span class="text-lg font-bold text-amber-600 font-outfit">{{ pending_orders }}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-blue-50/30 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                                <span class="text-xs font-bold text-luxe-navy uppercase tracking-widest">Processing</span>
+                            </div>
+                            <span class="text-lg font-bold text-blue-600 font-outfit">{{ processing_orders }}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-green-50/30 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                                <span class="text-xs font-bold text-luxe-navy uppercase tracking-widest">Completed</span>
+                            </div>
+                            <span class="text-lg font-bold text-green-600 font-outfit">{{ completed_orders }}</span>
+                        </div>
+                        <div class="flex items-center justify-between p-4 bg-red-50/30 rounded-xl">
+                            <div class="flex items-center gap-3">
+                                <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                                <span class="text-xs font-bold text-luxe-navy uppercase tracking-widest">Cancelled</span>
+                            </div>
+                            <span class="text-lg font-bold text-red-600 font-outfit">{{ cancelled_orders }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Actions & Recent Activity -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <!-- Quick Actions -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-stone-100">
+                    <h4 class="font-playfair text-xl font-bold text-luxe-navy mb-6 border-b border-stone-50 pb-4 italic">Quick Actions</h4>
+                    <div class="grid grid-cols-2 gap-4">
+                        <a href="{% url 'admin_product_add' %}" class="flex flex-col items-center gap-3 p-6 bg-luxe-navy/5 hover:bg-luxe-navy hover:text-white rounded-2xl transition-all group">
+                            <span class="material-symbols-outlined text-3xl text-luxe-navy group-hover:text-luxe-gold transition-colors">add_circle</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-center text-luxe-navy group-hover:text-white">Add Product</span>
+                        </a>
+                        <a href="{% url 'admin_inventory' %}" class="flex flex-col items-center gap-3 p-6 bg-luxe-gold/5 hover:bg-luxe-gold hover:text-white rounded-2xl transition-all group">
+                            <span class="material-symbols-outlined text-3xl text-luxe-gold group-hover:text-luxe-navy transition-colors">inventory_2</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-center text-luxe-navy group-hover:text-white">View Inventory</span>
+                        </a>
+                        <a href="{% url 'admin_orders' %}" class="flex flex-col items-center gap-3 p-6 bg-blue-50 hover:bg-blue-500 hover:text-white rounded-2xl transition-all group">
+                            <span class="material-symbols-outlined text-3xl text-blue-500 group-hover:text-white transition-colors">shopping_cart</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-center text-luxe-navy group-hover:text-white">Manage Orders</span>
+                        </a>
+                        <a href="{% url 'admin_customers' %}" class="flex flex-col items-center gap-3 p-6 bg-green-50 hover:bg-green-500 hover:text-white rounded-2xl transition-all group">
+                            <span class="material-symbols-outlined text-3xl text-green-500 group-hover:text-white transition-colors">group</span>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-center text-luxe-navy group-hover:text-white">View Customers</span>
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Site Performance -->
+                <div class="bg-white p-6 md:p-8 rounded-3xl shadow-sm border border-stone-100">
+                    <h4 class="font-playfair text-xl font-bold text-luxe-navy mb-6 border-b border-stone-50 pb-4 italic">Site Performance</h4>
+                    <div class="space-y-4">
+                        <div class="flex justify-between items-center p-3 bg-stone-50 rounded-xl">
+                            <span class="text-xs font-bold text-gray-600 uppercase tracking-widest">Top Category</span>
+                            <span class="text-sm font-bold text-luxe-navy">{{ top_category|default:"N/A" }}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-stone-50 rounded-xl">
+                            <span class="text-xs font-bold text-gray-600 uppercase tracking-widest">Best Selling Item</span>
+                            <span class="text-sm font-bold text-luxe-navy truncate max-w-[150px]">{{ best_selling_product|default:"N/A" }}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-stone-50 rounded-xl">
+                            <span class="text-xs font-bold text-gray-600 uppercase tracking-widest">Total Categories</span>
+                            <span class="text-sm font-bold text-luxe-navy">{{ total_categories }}</span>
+                        </div>
+                        <div class="flex justify-between items-center p-3 bg-luxe-gold/10 rounded-xl">
+                            <span class="text-xs font-bold text-luxe-navy uppercase tracking-widest">Conversion Rate</span>
+                            <span class="text-sm font-bold text-luxe-gold font-outfit">{{ conversion_rate|floatformat:1 }}%</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

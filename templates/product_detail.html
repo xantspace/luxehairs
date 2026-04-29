@@ -1,0 +1,308 @@
+{% extends 'base.html' %} 
+{% block title %}{{ product.name }} - LuxeHairs{% endblock %}
+
+{% block content %}
+<main class="min-h-screen bg-stone-50 py-8 font-inter">
+    <div class="max-w-[1440px] mx-auto px-4 lg:px-6">
+        
+        <!-- Breadcrumbs -->
+        <nav class="flex items-center text-[10px] md:text-xs text-gray-400 mb-4 uppercase tracking-widest font-black">
+            <a href="{% url 'home' %}" class="hover:text-luxe-navy">Home</a>
+            <span class="mx-2">/</span>
+            <a href="{% url 'shop' %}" class="hover:text-luxe-navy">Shop</a>
+            <span class="mx-2">/</span>
+            <span class="text-luxe-navy">{{ product.name }}</span>
+        </nav>
+
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+            
+            <!-- Left Column: Image Gallery (Jumia Style) -->
+            <div class="lg:col-span-4 bg-white rounded-2xl p-3 shadow-sm border border-stone-100 flex flex-col md:flex-row gap-4">
+                <!-- Thumbnails (Vertical on desktop) -->
+                <div class="order-2 md:order-1 flex md:flex-col gap-2 overflow-x-auto md:overflow-visible no-scrollbar">
+                    {% if product.image %}
+                    <button onclick="showContent('image', this)" class="thumbnail-btn active-thumb w-12 h-12 md:w-14 md:h-14 rounded-xl border-2 border-luxe-gold p-0.5 overflow-hidden flex-shrink-0 transition-all">
+                        <img src="{{ product.image.url }}" class="w-full h-full object-cover rounded-lg">
+                    </button>
+                    {% endif %}
+
+                    {% if product.video %}
+                    <button onclick="showContent('video', this)" class="thumbnail-btn w-12 h-12 md:w-14 md:h-14 rounded-xl border border-stone-200 hover:border-luxe-navy p-0.5 overflow-hidden flex-shrink-0 transition-all opacity-60 hover:opacity-100 relative group">
+                        <img src="{{ product.image.url }}" class="w-full h-full object-cover rounded-lg grayscale group-hover:grayscale-0">
+                        <div class="absolute inset-0 flex items-center justify-center">
+                            <div class="w-6 h-6 bg-white/90 rounded-full flex items-center justify-center shadow-lg transform group-hover:scale-110 transition-transform">
+                                <svg class="w-3 h-3 text-luxe-navy ml-0.5" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                    </button>
+                    {% else %}
+                    <!-- Optional: Support for multiple images or just a placeholder for video if you want to show it off -->
+                    <button onclick="showContent('image', this)" class="thumbnail-btn w-12 h-12 md:w-14 md:h-14 rounded-xl border border-stone-200 hover:border-luxe-navy p-0.5 overflow-hidden flex-shrink-0 transition-all opacity-60 hover:opacity-100">
+                        <img src="{{ product.image.url }}" class="w-full h-full object-cover rounded-lg grayscale hover:grayscale-0">
+                    </button>
+                    {% endif %}
+                </div>
+
+                <!-- Main Display Area -->
+                <div class="order-1 md:order-2 flex-1 relative aspect-square rounded-2xl overflow-hidden bg-stone-50 group border border-stone-100">
+                    <!-- Image Container -->
+                    <div id="main-image-container" class="w-full h-full">
+                        {% if product.image %}
+                        <img src="{{ product.image.url }}" class="w-full h-full object-cover transition-all duration-700 group-hover:scale-105">
+                        {% endif %}
+                    </div>
+
+                    <!-- Video Container -->
+                    <div id="main-video-container" class="hidden w-full h-full bg-black">
+                        {% if product.video %}
+                        <video id="main-product-video" class="w-full h-full object-contain" loop muted playsinline>
+                            <source src="{{ product.video.url }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        {% else %}
+                        <!-- Fallback for demo if you want to test the UI without an uploaded video -->
+                        <div class="w-full h-full flex flex-col items-center justify-center text-white p-8 text-center">
+                            <svg class="w-12 h-12 text-luxe-gold mb-4 opacity-50" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"></path></svg>
+                            <p class="text-xs font-bold uppercase tracking-widest text-luxe-gold">Video Preview</p>
+                            <p class="text-[10px] text-gray-400 mt-2">Upload a video in the admin panel to see it here!</p>
+                        </div>
+                        {% endif %}
+                        
+                        <!-- Play/Pause Overlay for Video -->
+                        {% if product.video %}
+                        <div onclick="toggleVideo()" class="absolute inset-0 flex items-center justify-center cursor-pointer group/vid z-20">
+                            <div id="video-play-btn" class="w-20 h-20 bg-white/10 backdrop-blur-md border border-white/20 rounded-full flex items-center justify-center opacity-0 group-hover/vid:opacity-100 transition-all scale-90 group-hover/vid:scale-100 shadow-2xl">
+                                <svg class="w-8 h-8 text-white ml-1" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                            </div>
+                        </div>
+                        {% endif %}
+                    </div>
+                    
+                    {% if product.badge_text %}
+                    <div class="absolute top-4 left-4 pointer-events-none">
+                        <span class="bg-luxe-navy text-white text-[10px] font-black px-3 py-1.5 rounded uppercase tracking-widest shadow-lg">{{ product.badge_text }}</span>
+                    </div>
+                    {% endif %}
+
+                    <!-- Wishlist Interaction -->
+                    <button class="absolute top-4 right-4 w-9 h-9 rounded-full bg-white/80 backdrop-blur text-gray-400 hover:text-red-500 flex items-center justify-center transition-all shadow-md z-10">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"></path></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Center Column: Products Intro & Price -->
+            <div class="lg:col-span-5 bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-stone-100">
+                <div class="mb-4">
+                    {% if product.is_new %}
+                    <span class="text-luxe-gold text-[9px] font-black uppercase tracking-[0.2em] mb-2 block">New Arrival</span>
+                    {% endif %}
+                    <h1 class="font-playfair text-2xl md:text-3xl font-bold text-luxe-navy leading-tight mb-2">{{ product.name }}</h1>
+                    <p class="text-xs text-gray-500 uppercase tracking-widest font-medium">Brand: <span class="text-luxe-navy font-bold">LuxeHairs Originals</span></p>
+                </div>
+
+                <!-- Ratings -->
+                <div class="flex items-center gap-2 mb-4">
+                    <div class="flex text-amber-400 text-sm">
+                        <span class="font-black font-outfit">{{ product.rating }}</span>
+                        <svg class="w-4 h-4 ml-1 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-4 h-4 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                        <svg class="w-4 h-4 text-gray-300 fill-current" viewBox="0 0 20 20"><path d="M10 15l-5.878 3.09 1.123-6.545L.489 6.91l6.572-.955L10 0l2.939 5.955 6.572.955-4.756 4.635 1.123 6.545z"/></svg>
+                    </div>
+                    <span class="text-[10px] text-gray-400 font-bold uppercase tracking-wide">(24 verified ratings)</span>
+                </div>
+
+                <div class="border-t border-b border-stone-100 py-3 mb-6">
+                    <div class="flex flex-col mb-2">
+                        <span class="text-3xl font-playfair font-bold text-luxe-navy font-outfit">₦{{ product.price }}</span>
+                        {% if product.original_price %}
+                        <div class="flex items-center gap-2 mt-1">
+                            <span class="text-sm text-gray-400 line-through decoration-red-500/50 font-outfit">₦{{ product.original_price }}</span>
+                            <span class="bg-red-50 text-red-600 text-[10px] font-black px-2 py-1 rounded uppercase tracking-wider font-outfit">-{{ product.discount_percentage }}%</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                    <p class="text-[10px] text-gray-400 font-medium">+ Shipping fees calculated at checkout</p>
+                </div>
+
+                <!-- Variations (Simulated) -->
+                <div class="space-y-4 mb-8">
+                    <div>
+                        <span class="text-[10px] font-black text-luxe-navy uppercase tracking-widest mb-2 block">Length (Inches)</span>
+                        <div class="flex flex-wrap gap-2">
+                            <button class="px-4 py-2 bg-luxe-navy text-white text-xs font-bold rounded-lg shadow-md ring-2 ring-offset-2 ring-luxe-navy/20 font-outfit">20"</button>
+                            <button class="px-4 py-2 bg-stone-50 text-gray-500 text-xs font-bold rounded-lg border border-stone-200 hover:border-luxe-navy hover:text-luxe-navy transition-all font-outfit">22"</button>
+                            <button class="px-4 py-2 bg-stone-50 text-gray-500 text-xs font-bold rounded-lg border border-stone-200 hover:border-luxe-navy hover:text-luxe-navy transition-all font-outfit">24"</button>
+                            <button class="px-4 py-2 bg-stone-50 text-gray-500 text-xs font-bold rounded-lg border border-stone-200 hover:border-luxe-navy hover:text-luxe-navy transition-all font-outfit">26"</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <form action="{% url 'add_to_cart' product.id %}" method="POST" class="flex-1">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full bg-luxe-gold hover:bg-luxe-navy text-white font-bold h-10 rounded-lg text-xs uppercase tracking-[0.15em] shadow-lg shadow-amber-300/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                            Add to Cart
+                        </button>
+                    </form>
+                    <button class="w-full sm:w-auto h-10 px-6 border border-luxe-navy text-luxe-navy font-bold rounded-lg text-xs uppercase tracking-[0.15em] hover:bg-luxe-navy hover:text-white transition-all">
+                        Call to Order
+                    </button>
+                </div>
+            </div>
+
+            <!-- Right Column: Delivery Info (Sidebar) -->
+            <!-- Note: Adjusting col-span-3 to fit remains unchanged, just structure update -->
+            <div class="lg:col-span-3 space-y-4 lg:-mt-0">
+                
+                <!-- Delivery Box -->
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
+                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-stone-100 pb-3 mb-4">Delivery & Returns</h3>
+                    
+                    <div class="space-y-4">
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-luxe-navy/5 flex items-center justify-center text-luxe-navy flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-luxe-navy mb-1">Luxe Express Delivery</p>
+                                <p class="text-[10px] text-gray-500 leading-relaxed">Free delivery on thousands of products in Lagos, Ibadan & Abuja.</p>
+                                <a href="#" class="text-[10px] text-luxe-gold font-bold underline mt-1 block">Details</a>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-luxe-navy/5 flex items-center justify-center text-luxe-navy flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-luxe-navy mb-1">Pickup Station</p>
+                                <p class="text-[10px] text-gray-500 leading-relaxed">Available for pickup at our Lekki store.</p>
+                            </div>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <div class="w-8 h-8 rounded-full bg-luxe-navy/5 flex items-center justify-center text-luxe-navy flex-shrink-0">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                            </div>
+                            <div>
+                                <p class="text-[11px] font-bold text-luxe-navy mb-1">Return Policy</p>
+                                <p class="text-[10px] text-gray-500 leading-relaxed">Free return within 15 days for official store items.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Seller Info -->
+                <div class="bg-white rounded-2xl p-4 shadow-sm border border-stone-100">
+                    <h3 class="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-stone-100 pb-3 mb-4">Seller Information</h3>
+                    
+                    <div class="flex items-center gap-3 mb-4">
+                        <div class="w-10 h-10 rounded-full bg-luxe-navy text-white flex items-center justify-center font-playfair font-bold text-lg">L</div>
+                        <div>
+                            <p class="text-xs font-bold text-luxe-navy">LuxeHairs Official</p>
+                            <p class="text-[9px] text-gray-400">Verified Premium Seller</p>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-between items-center bg-stone-50 p-3 rounded-lg">
+                        <div class="text-center flex-1 border-r border-stone-200">
+                            <p class="text-[13px] font-black text-luxe-navy font-outfit">100%</p>
+                            <p class="text-[8px] text-gray-400 uppercase tracking-wide">Seller Score</p>
+                        </div>
+                        <div class="text-center flex-1">
+                            <p class="text-[13px] font-black text-luxe-navy font-outfit">5k+</p>
+                            <p class="text-[8px] text-gray-400 uppercase tracking-wide">Followers</p>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            
+            <!-- Bottom Section: Details & Specs (Now Full Width below the main columns) -->
+            <div class="lg:col-span-12 bg-white rounded-2xl p-4 md:p-6 shadow-sm border border-stone-100 mt-4 lg:mt-0">
+                <h3 class="font-playfair text-xl font-bold text-luxe-navy mb-4 border-b border-stone-100 pb-3">Product Details</h3>
+                <div class="prose prose-sm text-gray-500 max-w-none">
+                    <p class="leading-relaxed mb-3">{{ product.description }}</p>
+                    <p class="leading-relaxed mb-3">Experience the pinnacle of luxury with our {{ product.subtitle }}. Sourced ethically and processed with the utmost care to preserve the natural cuticle alignment, ensuring longevity and a natural shine that mimics your own hair.</p>
+                    
+                    <ul class="list-disc pl-5 space-y-2 mt-3">
+                        <li><strong>Grade:</strong> <span class="font-outfit">12A</span> Virgin Hair</li>
+                        <li><strong>Texture:</strong> {{ product.category.name }}</li>
+                        <li><strong>Weight:</strong> <span class="font-outfit">3.5oz (100g)</span> per bundle</li>
+                        <li><strong>Life Span:</strong> Over <span class="font-outfit">3</span> years with proper care</li>
+                        <li><strong>Weft:</strong> Double stitch tight weft (No Shedding)</li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        
+    </div>
+</main>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    function showContent(type, btn) {
+        const imgContainer = document.getElementById('main-image-container');
+        const videoContainer = document.getElementById('main-video-container');
+        const video = document.getElementById('main-product-video');
+        const buttons = document.querySelectorAll('.thumbnail-btn');
+
+        // Reset buttons
+        buttons.forEach(b => {
+            b.classList.remove('active-thumb', 'border-luxe-gold', 'border-2', 'opacity-100');
+            b.classList.add('border-stone-200', 'border', 'opacity-60');
+        });
+
+        // Set active button
+        btn.classList.add('active-thumb', 'border-luxe-gold', 'border-2', 'opacity-100');
+        btn.classList.remove('border-stone-200', 'border', 'opacity-60');
+
+        if (type === 'video') {
+            if (imgContainer) imgContainer.classList.add('hidden');
+            if (videoContainer) {
+                videoContainer.classList.remove('hidden');
+                if (video) {
+                    video.play();
+                    document.getElementById('video-play-btn').style.opacity = '0';
+                }
+            }
+        } else {
+            if (videoContainer) {
+                videoContainer.classList.add('hidden');
+                if (video) video.pause();
+            }
+            if (imgContainer) imgContainer.classList.remove('hidden');
+        }
+    }
+
+    function toggleVideo() {
+        const video = document.getElementById('main-product-video');
+        const playBtn = document.getElementById('video-play-btn');
+        if (video.paused) {
+            video.play();
+            playBtn.style.opacity = '0';
+        } else {
+            video.pause();
+            playBtn.style.opacity = '1';
+        }
+    }
+
+    // Initial state check for "active-thumb"
+    document.addEventListener('DOMContentLoaded', () => {
+        const firstBtn = document.querySelector('.thumbnail-btn');
+        if (firstBtn) firstBtn.classList.add('active-thumb', 'border-luxe-gold', 'border-2', 'opacity-100');
+    });
+</script>
+<style>
+    .active-thumb {
+        border-color: #D4AF37 !important; /* luxe-gold */
+        opacity: 1 !important;
+    }
+</style>
+{% endblock %}

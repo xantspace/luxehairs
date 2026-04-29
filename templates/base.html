@@ -1,0 +1,1192 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>
+      {% block title %}LuxeHairs - Luxury Wigs & Fashion{% endblock %}
+    </title>
+    {% load static %}
+    <link
+      rel="shortcut icon"
+      href="{% static 'images/favicon.ico' %}"
+      type="image/x-icon"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&family=Playfair+Display:ital,wght@0,400..900;1,400..900&family=Outfit:wght@100..900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="{% static 'css/output.css' %}" />
+    <style>
+      html {
+        scroll-behavior: smooth;
+      }
+
+      /* Custom Premium Scrollbar */
+      ::-webkit-scrollbar {
+        width: 8px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #1c1a3a; /* luxe-navy */
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: #d4af37; /* luxe-gold */
+        border-radius: 20px;
+        border: 2px solid #1c1a3a; /* Padding effect */
+        transition: all 0.3s ease;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: #c9a961; /* luxe-gold-light */
+      }
+
+      /* Firefox Support */
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: #d4af37 #1c1a3a;
+      }
+
+      /* Specific thinner scrollbar for chat */
+      #chat-messages::-webkit-scrollbar {
+        width: 5px;
+      }
+      #chat-messages::-webkit-scrollbar-track {
+        background: transparent;
+      }
+      #chat-messages::-webkit-scrollbar-thumb {
+        background: rgba(212, 175, 55, 0.3);
+        border: none;
+      }
+      #chat-messages::-webkit-scrollbar-thumb:hover {
+        background: rgba(212, 175, 55, 0.5);
+      }
+      /* Luxe Select Styling */
+      .luxe-select {
+        appearance: none;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 24 24' stroke='%23D4AF37'%3E%3Cpath stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M19 9l-7 7-7-7'%3E%3C/path%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1rem center;
+        background-size: 1rem;
+        transition: all 0.3s ease;
+      }
+      .luxe-select:focus {
+        border-color: #d4af37;
+        box-shadow: 0 0 0 4px rgba(212, 175, 55, 0.1);
+      }
+      .font-outfit {
+        font-family: "Outfit", sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-gray-50">
+    <!-- HEADER/NAVBAR -->
+    <header class="bg-luxe-navy shadow-lg sticky top-0 z-50">
+      <nav class="container mx-auto px-4 py-4">
+        <div class="flex items-center justify-between">
+          <!-- Logo/Brand -->
+          <div class="flex items-center">
+            <a
+              href="{% url 'home' %}"
+              class="text-3xl font-bold text-luxe-gold hover:text-luxe-gold-light transition"
+            >
+              LuxeHairs.
+            </a>
+          </div>
+
+          <!-- Navigation Links (Desktop) -->
+          <div class="hidden md:flex items-center space-x-8">
+            <a
+              href="{% url 'home' %}"
+              class="text-luxe-cream hover:text-luxe-gold transition"
+              >Home</a
+            >
+            <a
+              href="{% url 'shop' %}"
+              class="text-luxe-cream hover:text-luxe-gold transition"
+              >Shop</a
+            >
+            <a
+              href="{% url 'about' %}"
+              class="text-luxe-cream hover:text-luxe-gold transition"
+              >About</a
+            >
+            <a
+              href="{% url 'home' %}#contact"
+              class="text-luxe-cream hover:text-luxe-gold transition"
+              >Contact</a
+            >
+            <a
+              href="{% url 'faq' %}"
+              class="text-luxe-cream hover:text-luxe-gold transition"
+              >FAQ</a
+            >
+          </div>
+
+          <!-- Right Side Icons -->
+          <div class="flex items-center space-x-6">
+            <!-- User Account Icon -->
+            {% if user.is_authenticated %}
+            <div class="group relative">
+              <button
+                class="flex items-center space-x-2 text-luxe-cream hover:text-luxe-gold transition"
+              >
+                <span
+                  class="text-[10px] font-black uppercase tracking-widest hidden sm:inline"
+                  >{{ user.first_name|default:user.username }}</span
+                >
+                <svg
+                  class="w-6 h-6"
+                  fill="none"
+                  stroke="currentColor"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    stroke-width="2"
+                    d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                  ></path>
+                </svg>
+              </button>
+              <!-- Sleek Dropdown -->
+              <div
+                class="absolute top-full right-0 mt-3 w-56 bg-white/90 backdrop-blur-xl rounded-[24px] shadow-[0_20px_50px_rgba(0,0,0,0.1)] border border-white/40 py-3 opacity-0 invisible translate-y-4 group-hover:opacity-100 group-hover:visible group-hover:translate-y-0 transition-all duration-500 z-50 overflow-hidden"
+              >
+                <div class="px-6 py-3 mb-2 border-b border-stone-50">
+                  <p
+                    class="text-[8px] font-black text-luxe-gold uppercase tracking-[0.2em] mb-0.5"
+                  >
+                    Welcome
+                  </p>
+                  <p class="text-xs font-bold text-luxe-navy truncate">
+                    {{ user.first_name|default:user.username }}
+                  </p>
+                </div>
+
+                <a
+                  href="{% url 'buyer_dashboard' %}"
+                  class="mx-2 flex items-center gap-3 px-4 py-3 rounded-xl text-[10px] font-bold text-gray-600 hover:bg-luxe-navy hover:text-white uppercase tracking-widest transition-all group/item"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-stone-50 flex items-center justify-center group-hover/item:bg-white/10 transition-colors"
+                  >
+                    <svg
+                      class="w-4 h-4 text-luxe-gold"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                      ></path>
+                    </svg>
+                  </div>
+                  Dashboard
+                </a>
+
+                {% if user.is_superuser %}
+                <a
+                  href="{% url 'custom_admin' %}"
+                  class="mx-2 flex items-center gap-3 px-4 py-3 rounded-xl text-[10px] font-bold text-gray-600 hover:bg-luxe-gold hover:text-white uppercase tracking-widest transition-all group/item"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-stone-50 flex items-center justify-center group-hover/item:bg-white/10 transition-colors"
+                  >
+                    <svg
+                      class="w-4 h-4 text-luxe-gold"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
+                      ></path>
+                    </svg>
+                  </div>
+                  Boutique Control
+                </a>
+                {% endif %}
+
+                <hr class="border-stone-50 my-2" />
+
+                <a
+                  href="{% url 'sign_out' %}"
+                  class="mx-2 flex items-center gap-3 px-4 py-3 rounded-xl text-[10px] font-bold text-red-500 hover:bg-red-50 transition-all group/item"
+                >
+                  <div
+                    class="w-8 h-8 rounded-lg bg-red-50 flex items-center justify-center group-hover/item:bg-white transition-colors"
+                  >
+                    <svg
+                      class="w-4 h-4"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        stroke-width="2"
+                        d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+                      ></path>
+                    </svg>
+                  </div>
+                  Logout
+                </a>
+              </div>
+            </div>
+            {% else %}
+            <a
+              href="{% url 'sign_in' %}"
+              class="text-luxe-cream hover:text-luxe-gold transition"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+                ></path>
+              </svg>
+            </a>
+            {% endif %}
+
+            <!-- Shopping Cart Icon with Badge -->
+            <a
+              href="{% url 'cart' %}"
+              class="relative text-luxe-cream hover:text-luxe-gold transition"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z"
+                ></path>
+              </svg>
+              <!-- Cart item count badge -->
+              <span
+                class="absolute -top-2 -right-2 bg-luxe-purple text-white text-xs rounded-full w-5 h-5 flex items-center justify-center"
+                >{{ cart.get_total_items }}</span
+              >
+            </a>
+
+            <!-- Mobile Menu Button -->
+            <button
+              id="mobile-menu-button"
+              class="md:hidden text-luxe-cream hover:text-luxe-gold transition p-2"
+            >
+              <svg
+                class="w-8 h-8"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="2"
+                  d="M4 6h16M4 12h16M4 18h16"
+                ></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <!-- Mobile Sidebar / Off-canvas Menu -->
+    <div
+      id="sidebar-overlay"
+      class="fixed inset-0 bg-black/60 z-[60] hidden opacity-0 transition-opacity duration-300 backdrop-blur-sm"
+    ></div>
+    <aside
+      id="mobile-sidebar"
+      class="fixed top-0 right-0 w-[60%] md:w-[50%] h-full bg-white z-[70] translate-x-[100%] transition-transform duration-300 ease-in-out shadow-[-10px_0_30px_rgba(0,0,0,0.1)] overflow-y-auto"
+    >
+      <!-- Sidebar Header -->
+      <div class="p-6 bg-luxe-navy flex items-center justify-between">
+        <span class="text-xl font-bold text-luxe-gold font-playfair">Menu</span>
+        <button
+          id="close-sidebar"
+          class="text-white hover:text-amber-300 transition-colors"
+        >
+          <svg
+            class="w-8 h-8"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Sidebar Links -->
+      <nav class="p-6 space-y-2">
+        <a
+          href="{% url 'home' %}"
+          class="flex items-center space-x-4 p-4 rounded-xl text-gray-700 hover:bg-luxe-navy hover:text-white transition-all group"
+        >
+          <svg
+            class="w-6 h-6 text-luxe-gold group-hover:text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"
+            ></path>
+          </svg>
+          <span class="font-medium">Home</span>
+        </a>
+        <a
+          href="{% url 'shop' %}"
+          class="flex items-center space-x-4 p-4 rounded-xl text-gray-700 hover:bg-luxe-navy hover:text-white transition-all group"
+        >
+          <svg
+            class="w-6 h-6 text-luxe-gold group-hover:text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
+            ></path>
+          </svg>
+          <span class="font-medium">Shop</span>
+        </a>
+        <a
+          href="#"
+          class="flex items-center space-x-4 p-4 rounded-xl text-gray-700 hover:bg-luxe-navy hover:text-white transition-all group"
+        >
+          <svg
+            class="w-6 h-6 text-luxe-gold group-hover:text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h7"
+            ></path>
+          </svg>
+          <span class="font-medium">Categories</span>
+        </a>
+        <a
+          href="{% url 'about' %}"
+          class="flex items-center space-x-4 p-4 rounded-xl text-gray-700 hover:bg-luxe-navy hover:text-white transition-all group"
+        >
+          <svg
+            class="w-6 h-6 text-luxe-gold group-hover:text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          <span class="font-medium">About Us</span>
+        </a>
+        <a
+          href="{% url 'home' %}#contact"
+          class="flex items-center space-x-4 p-4 rounded-xl text-gray-700 hover:bg-luxe-navy hover:text-white transition-all group"
+        >
+          <svg
+            class="w-6 h-6 text-luxe-gold group-hover:text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+            ></path>
+          </svg>
+          <span class="font-medium">Contact</span>
+        </a>
+        <a
+          href="{% url 'faq' %}"
+          class="flex items-center space-x-4 p-4 rounded-xl text-gray-700 hover:bg-luxe-navy hover:text-white transition-all group"
+        >
+          <svg
+            class="w-6 h-6 text-luxe-gold group-hover:text-white"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+            ></path>
+          </svg>
+          <span class="font-medium">FAQ</span>
+        </a>
+
+        <div class="pt-4 mt-4 border-t border-gray-100">
+          {% if user.is_authenticated %}
+          <a
+            href="{% url 'buyer_dashboard' %}"
+            class="flex items-center space-x-4 p-4 rounded-xl text-luxe-navy bg-luxe-gold/10 hover:bg-luxe-navy hover:text-white transition-all group"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"
+              ></path>
+            </svg>
+            <span class="font-bold">My Profile</span>
+          </a>
+          <a
+            href="{% url 'sign_out' %}"
+            class="flex items-center space-x-4 p-4 rounded-xl text-red-500 hover:bg-red-50 transition-all"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              ></path>
+            </svg>
+            <span class="font-bold">Sign Out</span>
+          </a>
+          {% else %}
+          <a
+            href="{% url 'sign_in' %}"
+            class="flex items-center space-x-4 p-4 rounded-xl text-white bg-luxe-navy hover:bg-luxe-gold transition-all shadow-lg"
+          >
+            <svg
+              class="w-6 h-6"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"
+              ></path>
+            </svg>
+            <span class="font-bold">Sign In</span>
+          </a>
+          {% endif %}
+        </div>
+      </nav>
+
+      <!-- Sidebar Footer -->
+      <div
+        class="mt-auto p-8 border-t border-gray-100 italic text-sm text-gray-400"
+      >
+        Experience the Luxury of Quality.
+      </div>
+    </aside>
+
+    <!-- MAIN CONTENT AREA -->
+    <main>
+      {% if messages %}
+      <div class="fixed top-24 right-4 z-[100] space-y-3 pointer-events-none">
+        {% for message in messages %}
+        <div
+          class="pointer-events-auto flex items-center gap-3 px-6 py-4 rounded-2xl shadow-2xl backdrop-blur-xl border border-white/20 animate-fade-in-right {% if message.tags == 'success' %}bg-green-500/90 text-white{% elif message.tags == 'error' %}bg-red-500/90 text-white{% else %}bg-luxe-navy/90 text-white{% endif %}"
+        >
+          {% if message.tags == 'success' %}
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M5 13l4 4L19 7"
+            ></path>
+          </svg>
+          {% elif message.tags == 'error' %}
+          <svg
+            class="w-5 h-5"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"
+            ></path>
+          </svg>
+          {% endif %}
+          <p class="text-[11px] font-bold uppercase tracking-widest">
+            {{ message }}
+          </p>
+          <button
+            onclick="this.parentElement.remove()"
+            class="ml-4 opacity-50 hover:opacity-100 transition-opacity"
+          >
+            <svg
+              class="w-4 h-4"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M6 18L18 6M6 6l12 12"
+              ></path>
+            </svg>
+          </button>
+        </div>
+        {% endfor %}
+      </div>
+      <style>
+        @keyframes fade-in-right {
+          from {
+            opacity: 0;
+            transform: translateX(50px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
+        .animate-fade-in-right {
+          animation: fade-in-right 0.5s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+        }
+      </style>
+      {% endif %} {% block content %} {% endblock %}
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-luxe-navy text-luxe-cream">
+      <div class="container mx-auto px-4 py-12">
+        <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+          <!-- Brand Column -->
+          <div>
+            <h3 class="text-2xl font-bold text-luxe-gold mb-4">LuxeHairs</h3>
+            <p class="text-sm">
+              Premium luxury wigs and fashion accessories for the modern woman.
+            </p>
+          </div>
+
+          <!-- Quick Links -->
+          <div>
+            <h4 class="font-bold text-luxe-gold mb-4">Quick Links</h4>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a href="#" class="hover:text-luxe-gold transition">About Us</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-luxe-gold transition">Shop All</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-luxe-gold transition"
+                  >New Arrivals</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-luxe-gold transition">Sale</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Customer Service -->
+          <div>
+            <h4 class="font-bold text-luxe-gold mb-4">Customer Service</h4>
+            <ul class="space-y-2 text-sm">
+              <li>
+                <a href="#" class="hover:text-luxe-gold transition"
+                  >Contact Us</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-luxe-gold transition"
+                  >Shipping Info</a
+                >
+              </li>
+              <li>
+                <a href="#" class="hover:text-luxe-gold transition">Returns</a>
+              </li>
+              <li>
+                <a href="#" class="hover:text-luxe-gold transition">FAQs</a>
+              </li>
+            </ul>
+          </div>
+
+          <!-- Newsletter -->
+          <div>
+            <h4 class="font-bold text-luxe-gold mb-4">Newsletter</h4>
+            <p class="text-sm mb-4">
+              Subscribe for exclusive offers and updates.
+            </p>
+            <div class="flex">
+              <input
+                type="email"
+                placeholder="Your email"
+                class="px-4 py-2 rounded-l-lg text-luxe-navy flex-1"
+              />
+              <button
+                class="bg-luxe-purple hover:bg-luxe-purple-light px-4 py-2 rounded-r-lg transition"
+              >
+                →
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bottom Bar -->
+        <div class="border-t border-luxe-purple mt-8 pt-8 text-center text-sm">
+          <p>&copy; 2026 LuxeHairs. All rights reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- AI Chat Window -->
+    <div
+      id="ai-chat-window"
+      class="fixed bottom-20 right-4 md:bottom-28 md:right-8 w-[90%] md:w-[330px] h-[380px] bg-white rounded-3xl shadow-2xl z-[9999] flex flex-col overflow-hidden transition-all duration-500 origin-bottom-right scale-0 opacity-0 pointer-events-none translate-y-16 border border-luxe-gold/20"
+    >
+      <!-- Chat Header -->
+      <div
+        class="bg-luxe-navy p-4 flex items-center justify-between border-b border-luxe-gold/20 relative overflow-hidden"
+      >
+        <!-- Animated Gradient Background -->
+        <div
+          class="absolute inset-0 bg-gradient-to-r from-luxe-navy via-[#252345] to-luxe-navy opacity-50"
+        ></div>
+
+        <div class="flex items-center space-x-3 relative z-10">
+          <div class="relative">
+            <div
+              class="w-10 h-10 rounded-full bg-gradient-to-br from-luxe-gold to-amber-200 flex items-center justify-center text-luxe-navy border-2 border-white/20 shadow-inner"
+            >
+              <svg
+                class="w-6 h-6"
+                fill="none"
+                stroke="currentColor"
+                viewBox="0 0 24 24"
+              >
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  stroke-width="1.5"
+                  d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
+                ></path>
+              </svg>
+            </div>
+            <div
+              class="absolute bottom-0 right-0 w-3 h-3 bg-green-500 rounded-full border-2 border-luxe-navy"
+            ></div>
+          </div>
+          <div>
+            <h3 class="text-luxe-gold font-bold text-sm tracking-tight">
+              Luxie AI
+            </h3>
+            <div class="flex items-center space-x-1.5">
+              <span
+                class="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"
+              ></span>
+              <p
+                class="text-[9px] text-white/70 uppercase tracking-widest font-black"
+              >
+                Concierge
+              </p>
+            </div>
+          </div>
+        </div>
+        <button
+          id="close-chat"
+          class="relative z-10 w-8 h-8 flex items-center justify-center rounded-xl bg-white/10 text-white/70 hover:text-white hover:bg-white/20 transition-all"
+        >
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M6 18L18 6M6 6l12 12"
+            ></path>
+          </svg>
+        </button>
+      </div>
+
+      <!-- Chat Messages -->
+      <div
+        id="chat-messages"
+        class="flex-1 overflow-y-auto pl-4 pr-1 py-4 space-y-4 bg-[#f8f9fc] scroll-smooth"
+      >
+        <!-- Luxie Greeting -->
+        <div class="flex flex-col space-y-2 self-start max-w-[85%]">
+          <div
+            class="bg-white text-gray-800 p-3.5 rounded-2xl rounded-tl-none text-xs shadow-sm border border-gray-100 leading-relaxed"
+          >
+            Welcome to <span class="text-luxe-navy font-bold">LuxeHairs</span>!!
+            I'm Luxie. <br /><br />
+            How can I make your day more glamorous? ✨
+          </div>
+          <span class="text-[9px] text-gray-400 ml-1 font-medium italic"
+            >LUXIE • JUST NOW</span
+          >
+        </div>
+
+        <!-- Typing Indicator (Hidden by default) -->
+        <div id="typing-indicator" class="hidden flex-col space-y-2 self-start">
+          <div
+            class="bg-white/50 p-2.5 rounded-2xl rounded-tl-none border border-gray-100 shadow-sm flex items-center space-x-2"
+          >
+            <div class="flex space-x-1">
+              <div
+                class="w-1 h-1 bg-luxe-gold rounded-full animate-bounce"
+              ></div>
+              <div
+                class="w-1 h-1 bg-luxe-gold rounded-full animate-bounce [animation-delay:-0.15s]"
+              ></div>
+              <div
+                class="w-1 h-1 bg-luxe-gold rounded-full animate-bounce [animation-delay:-0.3s]"
+              ></div>
+            </div>
+            <span class="text-[10px] text-gray-400 font-medium italic"
+              >Luxie is thinking...</span
+            >
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Input -->
+      <div class="p-4 bg-white border-t border-gray-100">
+        <form
+          id="chat-form"
+          class="flex items-center space-x-2"
+          method="post"
+          action="{% url 'chat' %}"
+        >
+          <div class="flex-1 relative">
+            <input
+              type="text"
+              id="chat-input"
+              placeholder="Ask Luxie..."
+              class="w-full bg-gray-50 border border-gray-200 rounded-2xl px-4 py-2.5 text-xs focus:outline-none focus:border-luxe-gold focus:ring-4 focus:ring-luxe-gold/10 transition-all font-medium"
+            />
+          </div>
+          <button
+            type="submit"
+            class="bg-luxe-navy text-luxe-gold w-10 h-10 flex items-center justify-center rounded-2xl hover:scale-105 active:scale-95 transition-all shadow-xl shadow-luxe-navy/10 border border-luxe-gold/20"
+          >
+            <svg
+              class="w-5 h-5"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="2"
+                d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"
+              ></path>
+            </svg>
+          </button>
+        </form>
+        <p
+          class="text-[8px] text-center text-gray-400 mt-2 font-medium uppercase tracking-tighter"
+        >
+          Premium AI Concierge
+        </p>
+      </div>
+    </div>
+
+    <!-- Floating AI Concierge Button -->
+    <div
+      id="draggable-ai-chat"
+      class="fixed bottom-4 right-4 md:bottom-8 md:right-8 z-[9999] group cursor-move select-none touch-none"
+    >
+      <!-- AI Sparkle Effect -->
+      <div
+        class="absolute inset-0 bg-luxe-gold rounded-full animate-ping opacity-20 group-hover:hidden pointer-events-none"
+      ></div>
+
+      <!-- Tooltip -->
+      <div
+        class="absolute bottom-full right-0 mb-4 opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none translate-y-2 group-hover:translate-y-0"
+      >
+        <div
+          class="bg-luxe-navy text-luxe-gold text-[10px] font-black uppercase tracking-[0.2em] py-2.5 px-5 rounded-2xl shadow-2xl border border-luxe-gold/30 whitespace-nowrap backdrop-blur-md"
+        >
+          Say Hi to Luxie...🤖
+        </div>
+      </div>
+
+      <button
+        id="ai-chat-trigger"
+        draggable="false"
+        class="relative flex items-center justify-center w-12 h-12 md:w-16 md:h-16 bg-gradient-to-br from-luxe-navy to-[#0a1e3d] text-luxe-gold rounded-full shadow-2xl hover:scale-110 md:hover:-translate-y-2 transition-all duration-500 border border-luxe-gold/20 group"
+      >
+        <svg
+          class="w-6 h-6 md:w-8 md:h-8 pointer-events-none"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="1.5"
+            d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 012-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"
+          ></path>
+        </svg>
+        <div
+          class="absolute -top-1 -right-1 w-4 h-4 bg-luxe-gold rounded-full border-2 border-luxe-navy animate-pulse"
+        ></div>
+      </button>
+    </div>
+
+    <!-- Back to Top Button (Mobile) -->
+    <button
+      id="back-to-top"
+      class="fixed bottom-4 left-4 z-[9998] w-12 h-12 bg-white/20 backdrop-blur-md border border-white/30 text-luxe-navy rounded-full flex items-center justify-center shadow-xl md:hidden opacity-0 translate-y-10 transition-all duration-500 pointer-events-none"
+    >
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2.5"
+          d="M5 15l7-7 7 7"
+        ></path>
+      </svg>
+    </button>
+
+    <!-- Sidebar Toggle Script -->
+    <script>
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const closeSidebar = document.getElementById("close-sidebar");
+      const sidebar = document.getElementById("mobile-sidebar");
+      const overlay = document.getElementById("sidebar-overlay");
+
+      function toggleSidebar() {
+        const isOpen = !sidebar.classList.contains("translate-x-[100%]");
+
+        if (isOpen) {
+          // Close
+          sidebar.classList.add("translate-x-[100%]");
+          overlay.classList.add("opacity-0");
+          setTimeout(() => {
+            overlay.classList.add("hidden");
+            document.body.style.overflow = "";
+          }, 300);
+        } else {
+          // Open
+          overlay.classList.remove("hidden");
+          setTimeout(() => {
+            overlay.classList.remove("opacity-0");
+          }, 10);
+          sidebar.classList.remove("translate-x-[100%]");
+          document.body.style.overflow = "hidden"; // Prevent scroll
+        }
+      }
+
+      mobileMenuButton.addEventListener("click", toggleSidebar);
+      closeSidebar.addEventListener("click", toggleSidebar);
+      overlay.addEventListener("click", toggleSidebar);
+    </script>
+
+    <!-- AI Chat Logic -->
+    <script>
+      const chatIcon = document.getElementById("draggable-ai-chat");
+      const chatTrigger = document.getElementById("ai-chat-trigger");
+      const chatWindow = document.getElementById("ai-chat-window");
+      const closeChat = document.getElementById("close-chat");
+      const chatForm = document.getElementById("chat-form");
+      const chatInput = document.getElementById("chat-input");
+      const chatMessages = document.getElementById("chat-messages");
+      const typingIndicator = document.getElementById("typing-indicator");
+
+      let isDragging = false;
+      let startX, startY, initialLeft, initialTop;
+      let dragMoved = false;
+
+      // Toggle Chat Window
+      const toggleChat = () => {
+        const isOpen = chatWindow.classList.contains("scale-100");
+        if (isOpen) {
+          chatWindow.classList.remove(
+            "scale-100",
+            "opacity-100",
+            "pointer-events-auto",
+            "translate-y-0",
+          );
+          chatWindow.classList.add(
+            "scale-0",
+            "opacity-0",
+            "pointer-events-none",
+            "translate-y-16",
+          );
+          chatTrigger.classList.remove("rotate-90", "scale-90");
+        } else {
+          chatWindow.classList.add(
+            "scale-100",
+            "opacity-100",
+            "pointer-events-auto",
+            "translate-y-0",
+          );
+          chatWindow.classList.remove(
+            "scale-0",
+            "opacity-0",
+            "pointer-events-none",
+            "translate-y-16",
+          );
+          chatTrigger.classList.add("rotate-90", "scale-90");
+          chatInput.focus();
+        }
+      };
+
+      chatTrigger.addEventListener("click", (e) => {
+        if (!dragMoved) {
+          toggleChat();
+        }
+      });
+
+      closeChat.addEventListener("click", toggleChat);
+
+      // Draggable Logic
+      const onStart = (e) => {
+        isDragging = true;
+        dragMoved = false;
+
+        const clientX = e.type.includes("touch")
+          ? e.touches[0].clientX
+          : e.clientX;
+        const clientY = e.type.includes("touch")
+          ? e.touches[0].clientY
+          : e.clientY;
+
+        const rect = chatIcon.getBoundingClientRect();
+        startX = clientX;
+        startY = clientY;
+        initialLeft = rect.left;
+        initialTop = rect.top;
+
+        chatIcon.style.transition = "none";
+      };
+
+      const onMove = (e) => {
+        if (!isDragging) return;
+
+        const clientX = e.type.includes("touch")
+          ? e.touches[0].clientX
+          : e.clientX;
+        const clientY = e.type.includes("touch")
+          ? e.touches[0].clientY
+          : e.clientY;
+
+        const dx = clientX - startX;
+        const dy = clientY - startY;
+
+        if (Math.abs(dx) > 5 || Math.abs(dy) > 5) {
+          dragMoved = true;
+        }
+
+        // Once moved, we switch from bottom/right layout to top/left
+        chatIcon.style.bottom = "auto";
+        chatIcon.style.right = "auto";
+        chatIcon.style.left = `${initialLeft + dx}px`;
+        chatIcon.style.top = `${initialTop + dy}px`;
+      };
+
+      const onEnd = (e) => {
+        if (!isDragging) return;
+        isDragging = false;
+        chatIcon.style.transition = "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)";
+      };
+
+      chatIcon.addEventListener("mousedown", onStart);
+      window.addEventListener("mousemove", onMove);
+      window.addEventListener("mouseup", onEnd);
+
+      chatIcon.addEventListener("touchstart", onStart, { passive: false });
+      window.addEventListener("touchmove", onMove, { passive: false });
+      window.addEventListener("touchend", onEnd);
+
+      // Chat Messaging Logic
+      function addMessage(text, isUser = false) {
+        const msgDiv = document.createElement("div");
+        msgDiv.className = `flex flex-col space-y-2 ${isUser ? "self-end items-end max-w-[80%]" : "self-start max-w-[85%]"}`;
+
+        const contentDiv = document.createElement("div");
+        contentDiv.className = isUser
+          ? "bg-luxe-gold text-luxe-navy p-4 rounded-2xl rounded-tr-none text-sm shadow-md font-medium"
+          : "bg-white text-gray-800 p-4 rounded-2xl rounded-tl-none text-sm shadow-sm border border-gray-100 leading-relaxed";
+        
+        if (isUser) {
+          contentDiv.textContent = text;
+        } else {
+          // Typing effect for Luxie
+          contentDiv.textContent = "";
+          let i = 0;
+          const speed = 15; // Speed in ms
+          function typeWriter() {
+            if (i < text.length) {
+              contentDiv.textContent += text.charAt(i);
+              i++;
+              setTimeout(typeWriter, speed);
+              chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+          }
+          typeWriter();
+        }
+
+        const metaSpan = document.createElement("span");
+        metaSpan.className =
+          "text-[10px] text-gray-400 font-medium uppercase tracking-tighter";
+        metaSpan.textContent = isUser ? "YOU • JUST NOW" : "LUXIE • JUST NOW";
+
+        msgDiv.appendChild(contentDiv);
+        msgDiv.appendChild(metaSpan);
+
+        // Insert before typing indicator to keep it at the bottom
+        chatMessages.insertBefore(msgDiv, typingIndicator);
+
+        // Scroll to bottom
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+      }
+
+      chatForm.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        const message = chatInput.value.trim();
+        if (!message) return;
+
+        // Add user message to UI
+        addMessage(message, true);
+        chatInput.value = "";
+
+        // Show typing indicator
+        typingIndicator.classList.remove("hidden");
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+
+        try {
+          const response = await fetch("/chat/", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              "X-CSRFToken": "{{ csrf_token }}",
+            },
+            body: JSON.stringify({ message: message }),
+          });
+
+          const data = await response.json();
+
+          // Hide typing indicator and add Luxie's response
+          typingIndicator.classList.add("hidden");
+          addMessage(data.response);
+        } catch (error) {
+          console.error("Error:", error);
+          typingIndicator.classList.add("hidden");
+          addMessage(
+            "I'm sorry, I'm having a little trouble connecting right now. Please try again in a moment! 🎀",
+          );
+        }
+      });
+
+      // Back to Top Logic (Mobile)
+      const backToTopBtn = document.getElementById("back-to-top");
+
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 300) {
+          backToTopBtn.classList.remove(
+            "opacity-0",
+            "translate-y-10",
+            "pointer-events-none",
+          );
+          backToTopBtn.classList.add(
+            "opacity-100",
+            "translate-y-0",
+            "pointer-events-none-override",
+          );
+          backToTopBtn.style.pointerEvents = "auto"; // Force enable clicks
+        } else {
+          backToTopBtn.classList.add(
+            "opacity-0",
+            "translate-y-10",
+            "pointer-events-none",
+          );
+          backToTopBtn.classList.remove("opacity-100", "translate-y-0");
+          backToTopBtn.style.pointerEvents = "none";
+        }
+      });
+
+      backToTopBtn.addEventListener("click", () => {
+        window.scrollTo({
+          top: 0,
+          behavior: "smooth",
+        });
+      });
+    </script>
+
+    {% block extra_js %}{% endblock %}
+  </body>
+</html>

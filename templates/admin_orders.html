@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% block title %}Orders - LuxeHairs Admin{% endblock %}
+
+{% block content %}
+<!-- Use standard site fonts from base.html -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+
+<style>
+    .font-inter { font-family: 'Inter', sans-serif; }
+    .font-playfair { font-family: 'Playfair Display', serif; }
+    .font-outfit { font-family: 'Outfit', sans-serif; }
+    .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+    .filled-icon { font-variation-settings: 'FILL' 1; }
+    
+    /* Site Colors Integration */
+    .admin-dashboard {
+        background-color: #f7f6f8;
+        color: #1C1A3A; /* luxe-navy */
+    }
+    .text-luxe-navy { color: #1C1A3A; }
+    .text-luxe-gold { color: #D4AF37; }
+    .bg-luxe-navy { background-color: #1C1A3A; }
+    .bg-luxe-gold { background-color: #D4AF37; }
+    .bg-luxe-gold\/10 { background-color: rgba(212, 175, 55, 0.1); }
+    .bg-luxe-gold\/5 { background-color: rgba(212, 175, 55, 0.05); }
+    .border-luxe-gold { border-color: #D4AF37; }
+</style>
+
+<div class="admin-dashboard font-inter min-h-screen flex">
+    <!-- SideNavBar -->
+    <aside class="hidden lg:flex w-64 border-r border-[#e0dbe6] bg-white flex-col shrink-0">
+        <div class="p-6 flex flex-col h-full">
+            <div class="flex items-center gap-3 mb-10">
+                <div class="w-10 h-10 rounded-full bg-luxe-navy flex items-center justify-center text-luxe-gold shadow-lg shadow-luxe-navy/10">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"></path></svg>
+                </div>
+                <div class="flex flex-col">
+                    <h1 class="text-luxe-navy text-base font-bold leading-none font-playfair">Boutique</h1>
+                    <p class="text-gray-400 text-[10px] font-black uppercase tracking-widest mt-1">Admin Portal</p>
+                </div>
+            </div>
+            <nav class="flex flex-col gap-2 flex-1">
+                <a class="flex items-center gap-3 px-3 py-3 text-gray-500 hover:bg-luxe-gold/5 rounded-xl transition-all group" href="{% url 'custom_admin' %}">
+                    <span class="material-symbols-outlined group-hover:text-luxe-gold transition-colors">dashboard</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Dashboard</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 text-gray-500 hover:bg-luxe-gold/5 rounded-xl transition-all group" href="{% url 'admin_product_add' %}">
+                    <span class="material-symbols-outlined group-hover:text-luxe-gold transition-colors">inventory_2</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Inventory</span>
+                </a>
+                <a class="flex items-center gap-3 px-4 py-3 bg-luxe-navy text-luxe-gold rounded-xl shadow-lg shadow-luxe-navy/20 transition-all" href="{% url 'admin_orders' %}">
+                    <span class="material-symbols-outlined filled-icon">shopping_cart</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Orders</span>
+                </a>
+                <a class="flex items-center gap-3 px-3 py-3 text-gray-500 hover:bg-luxe-gold/5 rounded-xl transition-all group" href="{% url 'admin_customers' %}">
+                    <span class="material-symbols-outlined group-hover:text-luxe-gold transition-colors">group</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Customers</span>
+                </a>
+            </nav>
+            <div class="mt-auto pt-6 border-t border-stone-100">
+                <a class="flex items-center gap-3 px-3 py-3 text-gray-400 hover:text-luxe-gold transition-all" href="{% url 'home' %}">
+                    <span class="material-symbols-outlined">storefront</span>
+                    <span class="text-xs font-bold uppercase tracking-widest">Store Front</span>
+                </a>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto">
+        <!-- Header & Breadcrumbs -->
+        <div class="max-w-7xl mx-auto px-8 py-10">
+            <div class="flex flex-col gap-1 mb-8">
+                <div class="flex items-center gap-2 text-[10px] text-gray-400 uppercase tracking-widest font-black">
+                    <a class="hover:text-luxe-gold transition-colors" href="{% url 'custom_admin' %}">Admin</a>
+                    <span class="material-symbols-outlined text-[10px]">chevron_right</span>
+                    <span class="text-luxe-navy">Orders</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-wrap justify-between items-center gap-4 mb-10">
+                <h2 class="text-luxe-navy text-4xl font-bold font-playfair tracking-tight">Order Management</h2>
+                <div class="flex gap-4">
+                    <div class="px-6 py-3 rounded-2xl bg-white border border-stone-200 text-gray-600 text-[10px] font-black uppercase tracking-[0.2em]">
+                        Total: {{ total_orders }}
+                    </div>
+                </div>
+            </div>
+
+            <!-- Order Stats Grid -->
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
+                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-stone-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Pending</p>
+                    <h3 class="text-3xl font-playfair font-bold text-amber-600">{{ pending_orders }}</h3>
+                </div>
+                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-stone-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Processing</p>
+                    <h3 class="text-3xl font-playfair font-bold text-blue-600">{{ processing_orders }}</h3>
+                </div>
+                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-stone-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Completed</p>
+                    <h3 class="text-3xl font-playfair font-bold text-green-600">{{ completed_orders }}</h3>
+                </div>
+                <div class="bg-white p-4 md:p-6 rounded-3xl shadow-sm border border-stone-100">
+                    <p class="text-[9px] font-black text-gray-400 uppercase tracking-widest mb-2">Total Revenue</p>
+                    <h3 class="text-2xl font-playfair font-bold text-luxe-navy font-outfit">₦{{ total_revenue|floatformat:0 }}</h3>
+                </div>
+            </div>
+
+            <!-- Orders Table -->
+            <div class="bg-white p-4 md:p-8 rounded-3xl shadow-sm border border-stone-100">
+                <h4 class="font-playfair text-2xl font-bold text-luxe-navy mb-8 border-b border-stone-50 pb-6 italic">Recent Orders</h4>
+                
+                <!-- Orders Mobile Grid (Visible only on mobile) -->
+                <div class="grid grid-cols-1 gap-4 lg:hidden">
+                    {% for order in orders %}
+                    <div class="bg-stone-50/50 p-4 rounded-2xl border border-stone-100">
+                        <div class="flex justify-between items-start mb-3">
+                            <div>
+                                <p class="text-[8px] font-black text-gray-400 uppercase tracking-widest mb-1">Order ID</p>
+                                <p class="text-xs font-bold text-luxe-navy">#{{ order.id }}</p>
+                            </div>
+                            <div class="text-right">
+                                {% if order.status == 'pending' %}
+                                <span class="px-2 py-1 bg-amber-50 text-amber-600 rounded-lg text-[9px] font-black uppercase">Pending</span>
+                                {% elif order.status == 'processing' %}
+                                <span class="px-2 py-1 bg-blue-50 text-blue-600 rounded-lg text-[9px] font-black uppercase">Processing</span>
+                                {% elif order.status == 'completed' %}
+                                <span class="px-2 py-1 bg-green-50 text-green-600 rounded-lg text-[9px] font-black uppercase">Completed</span>
+                                {% elif order.status == 'cancelled' %}
+                                <span class="px-2 py-1 bg-red-50 text-red-600 rounded-lg text-[9px] font-black uppercase">Cancelled</span>
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="border-t border-white pt-3 space-y-2">
+                            <div class="flex justify-between">
+                                <span class="text-[8px] font-black text-gray-400 uppercase tracking-widest">Customer</span>
+                                <span class="text-xs font-bold text-luxe-navy">{{ order.user.first_name }} {{ order.user.last_name }}</span>
+                            </div>
+                            <div class="flex justify-between">
+                                <span class="text-[8px] font-black text-gray-400 uppercase tracking-widest">Date</span>
+                                <span class="text-xs text-gray-500">{{ order.created_at|date:"M d, Y" }}</span>
+                            </div>
+                            <div class="flex justify-between items-center border-t border-white pt-2">
+                                <span class="text-[8px] font-black text-gray-400 uppercase tracking-widest">Total</span>
+                                <span class="text-sm font-bold text-luxe-gold font-outfit">₦{{ order.total_price }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <div class="py-8 text-center text-gray-400 italic text-xs">No orders found.</div>
+                    {% endfor %}
+                </div>
+
+                <!-- Orders Table (Visible only on desktop) -->
+                <div class="hidden lg:block overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="text-[10px] font-black text-gray-400 uppercase tracking-widest border-b border-stone-50">
+                                <th class="pb-6 pl-4">Order ID</th>
+                                <th class="pb-6">Customer</th>
+                                <th class="pb-6">Date</th>
+                                <th class="pb-6">Items</th>
+                                <th class="pb-6">Total</th>
+                                <th class="pb-6 text-right pr-4">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody class="divide-y divide-stone-50">
+                            {% for order in orders %}
+                            <tr class="group hover:bg-stone-50/50 transition-colors">
+                                <td class="py-6 pl-4">
+                                    <p class="text-sm font-bold text-luxe-navy">#{{ order.id }}</p>
+                                </td>
+                                <td class="py-6">
+                                    <div class="flex items-center gap-3">
+                                        <div class="w-8 h-8 rounded-full bg-luxe-navy/10 flex items-center justify-center text-luxe-navy font-bold text-[10px] overflow-hidden">
+                                            {% if order.user.profile.profile_image %}
+                                                <img src="{{ order.user.profile.profile_image.url }}" class="w-full h-full object-cover">
+                                            {% else %}
+                                                {{ order.user.first_name|slice:":1" }}{{ order.user.last_name|slice:":1" }}
+                                            {% endif %}
+                                        </div>
+                                        <div>
+                                            <p class="text-sm font-bold text-luxe-navy">{{ order.user.first_name }} {{ order.user.last_name }}</p>
+                                            <p class="text-[10px] text-gray-400">{{ order.user.email }}</p>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="py-6 text-xs text-gray-500">
+                                    {{ order.created_at|date:"M d, Y" }}
+                                    <p class="text-[10px] text-gray-400">{{ order.created_at|time:"h:i A" }}</p>
+                                </td>
+                                <td class="py-6 text-xs font-medium text-luxe-navy">
+                                    {{ order.items.count }} item{{ order.items.count|pluralize }}
+                                </td>
+                                <td class="py-6 text-sm font-bold text-luxe-gold font-outfit">
+                                    ₦{{ order.total_price }}
+                                </td>
+                                <td class="py-6 text-right pr-4">
+                                    {% if order.status == 'pending' %}
+                                    <span class="px-3 py-1 bg-amber-50 text-amber-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Pending</span>
+                                    {% elif order.status == 'processing' %}
+                                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Processing</span>
+                                    {% elif order.status == 'completed' %}
+                                    <span class="px-3 py-1 bg-green-50 text-green-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Completed</span>
+                                    {% elif order.status == 'cancelled' %}
+                                    <span class="px-3 py-1 bg-red-50 text-red-600 rounded-lg text-[9px] font-black uppercase tracking-widest">Cancelled</span>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                            {% empty %}
+                            <tr>
+                                <td colspan="6" class="py-12 text-center text-gray-400 italic">No orders found.</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+{% endblock %}

@@ -1,0 +1,892 @@
+{% extends 'base.html' %} {% block title %}Home - LuxeHairs{% endblock %}
+{% block content %}
+<div class="relative w-full h-screen overflow-hidden">
+  <!-- Background video -->
+  <video
+    autoplay
+    muted
+    loop
+    playsinline
+    class="absolute top-0 left-0 w-full h-full object-cover"
+  >
+    <source src="/static/videos/hero.mp4" type="video/mp4" />
+  </video>
+
+  <!-- Overlay (optional, for readability) -->
+  <div class="absolute inset-0 bg-black/50"></div>
+
+  <!-- Content -->
+  <div class="relative z-10 flex items-center justify-center h-full text-white">
+    <section
+      class="relative min-h-screen flex items-center justify-center text-white px-6"
+    >
+      <div class="max-w-5xl text-center">
+        <!-- Script accent -->
+        <p
+          class="font-script text-4xl md:text-5xl text-amber-300 mb-4 tracking-wide"
+        >
+          Where Luxury Hair meets
+        </p>
+
+        <!-- Main luxury headline -->
+        <h1
+          class="font-playfair text-5xl md:text-7xl lg:text-8xl font-semibold leading-tight tracking-tight"
+        >
+          Timeless Confidence
+        </h1>
+
+        <!-- Subtle divider -->
+        <div class="mx-auto mt-6 h-px w-24 bg-amber-300/60"></div>
+
+        <!-- Supporting line -->
+        <p class="mt-6 text-sm uppercase tracking-[0.35em] text-gray-300">
+          Crafted for elegance · Designed to empower
+        </p>
+        <div>
+          <ul class="list-none flex justify-center mt-8 space-x-6 text-lg">
+            <li
+              class="border-2 border-solid p-2 rounded-[10px] bg-luxe-navy font-bold"
+            >
+              <a href="#">Shop Now</a>
+            </li>
+            <li
+              class="border-2 border-solid border-white p-2 rounded-[10px] hover:bg-amber-300 transition hover:text-luxe-navy hover:cursor-pointer font-bold hover:border-luxe-navy"
+            >
+              <a href="#" class="hover:text-luxe-navy">Explore Collections</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+<!-- Featured Collection -->
+<section class="py-20 px-4 bg-white">
+  <div class="max-w-7xl mx-auto">
+      <div class="text-center mb-12">
+        <h2 class="font-playfair text-3xl md:text-4xl lg:text-5xl font-bold text-luxe-navy mb-4">Featured Collection</h2>
+        <div class="h-1 w-24 bg-amber-300 mx-auto rounded-full"></div>
+      </div>
+
+      <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
+        {% for product in featured_products %}
+        <!-- Featured Card -->
+        <div class="group cursor-pointer">
+            <div class="relative w-full aspect-[3/4] overflow-hidden rounded-xl bg-gray-100 shadow-md transition-shadow duration-300 group-hover:shadow-xl">
+                 {% if product.image %}
+                 <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 bg-gray-200">
+                 {% else %}
+                 <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">No Image</div>
+                 {% endif %}
+                 <div class="absolute inset-0 bg-black/10 group-hover:bg-transparent transition-colors duration-300"></div>
+                 <button class="absolute bottom-4 left-1/2 -translate-x-1/2 translate-y-full opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300 bg-white text-luxe-navy px-4 py-2 text-xs md:text-sm font-bold uppercase tracking-wider hover:bg-luxe-navy hover:text-white w-[90%] shadow-lg">
+                   <a href="{% url 'product_detail' product.id %}"> Quick View</a>
+                 </button>
+            </div>
+            <div class="mt-4 text-center">
+                <h3 class="font-playfair text-base md:text-lg font-medium text-gray-900 group-hover:text-luxe-navy transition-colors">{{ product.name }}</h3>
+                <p class="mt-1 text-sm text-gray-500 font-light">₦{{ product.price }}</p>
+            </div>
+        </div>
+        {% empty %}
+        <p class="col-span-4 text-center text-gray-400">No featured products available at the moment.</p>
+        {% endfor %}
+
+      </div>
+  </div>
+</section>
+<!-- New Arrivals Section -->
+<section class="py-20 px-4 bg-stone-50">
+    <div class="max-w-7xl mx-auto">
+        <!-- Section Header -->
+         
+        <div class="flex justify-between items-end mb-12 px-2">
+            <div>
+                <h2 class="font-playfair text-3xl md:text-4xl font-bold text-luxe-navy">New Arrivals</h2>
+                <div class="h-1 w-16 bg-amber-300 mt-2 rounded-full"></div>
+            </div>
+            <a href="#" class="hidden md:inline-block text-luxe-navy hover:text-amber-600 font-medium transition-colors border-b border-luxe-navy hover:border-amber-600 pb-0.5">
+                View All Collection
+            </a>
+        </div>
+
+        <!-- Product Grid -->
+         
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-6 lg:gap-8">
+            {% for product in new_arrivals %}
+            <!-- Product 1 -->
+            <div class="group">
+                <div class="relative overflow-hidden rounded-lg mb-4 bg-white shadow-sm aspect-[4/5]">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110 bg-gray-200">
+                    <!-- Badge -->
+                    <div class="absolute top-3 left-3 bg-amber-300 text-luxe-navy text-xs font-bold px-2 py-1 uppercase tracking-widest">{{ product.tag }}</div>
+                    {% else %}
+                 <div class="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">No Image</div>
+                 {% endif %}
+                 
+                    <!-- Overlay Actions -->
+                    <div class="absolute inset-x-0 bottom-0 p-4 translate-y-full group-hover:translate-y-0 transition-transform duration-300 flex justify-center bg-white/90 backdrop-blur-sm">
+                        <form action="{% url 'add_to_cart' product.id %}" method="POST" class="flex-1">
+                        {% csrf_token %}
+                        <button type="submit" class="w-full bg-luxe-navy text-white text-sm font-bold py-2.5 uppercase tracking-wide hover:bg-luxe-gold transition-colors">
+                            Add to Cart
+                        </button>
+                    </form>
+                    </div>
+                </div>
+                <div>
+                     <h3 class="font-playfair text-lg font-medium text-gray-900 leading-tight mb-1 group-hover:text-luxe-navy cursor-pointer">{{product.name}}</h3>
+                     <p class="text-gray-500 text-sm">{{product.price}}</p>
+                </div>
+            </div>
+
+            {% endfor %}
+
+        <!-- Mobile View All Button (visible only on small screens) -->
+        <div class="mt-10 text-center md:hidden">
+            <a href="#" class="inline-block border border-luxe-navy text-luxe-navy font-bold py-3 px-8 rounded-full uppercase tracking-widest text-xs hover:bg-luxe-navy hover:text-white transition-colors">
+                View All
+            </a>
+        </div>
+    </div>
+</section>
+<!-- Promotional Banner -->
+<section class="relative py-24 bg-gray-900 overflow-hidden">
+    <!-- Background Image -->
+    <div class="absolute inset-0">
+        <img src="static/images/promo.jpg" alt="Spring Collection Background" class="w-full h-full object-cover opacity-60">
+        <div class="absolute inset-0 bg-gradient-to-r from-luxe-navy/90 to-transparent"></div>
+    </div>
+    
+    <div class="relative max-w-7xl mx-auto px-4 flex items-center">
+        <div class="max-w-xl">
+            <h2 class="font-playfair text-4xl md:text-5xl lg:text-6xl font-bold text-white mb-6 leading-tight">
+                Limited Time: <br/>
+                <span class="text-amber-300">20% Off</span> Spring Collection
+            </h2>
+            <p class="text-gray-200 text-lg mb-8 font-light">
+                Refresh your look with our newest arrivals. Premium quality, lighter textures, and vibrant styles for the season.
+            </p>
+            <a href="#" class="inline-block bg-white text-luxe-navy font-bold py-4 px-10 rounded-full hover:bg-amber-300 transition-colors uppercase tracking-widest shadow-lg">
+                Shop The Sale
+            </a>
+        </div>
+    </div>
+</section>
+<!-- Best Sellers Section (Alibaba Style Layout) -->
+<section class="py-16 px-4 bg-stone-50">
+    <div class="max-w-7xl mx-auto">
+        <div class="flex flex-col lg:flex-row-reverse gap-6">
+            
+            <!-- Right Sidebar / Banner Area -->
+            <div class="w-full lg:w-1/4 bg-white rounded-2xl shadow-sm p-6 flex flex-col justify-between border-t-4 border-luxe-navy h-auto lg:h-auto min-h-[300px]">
+                <div>
+                    <h2 class="font-playfair text-3xl font-bold text-luxe-navy mb-2">Weekly Best Sellers</h2>
+                    <p class="text-gray-500 text-sm mb-6">Top rated by our community</p>
+                    
+                    <div class="inline-block bg-amber-100 text-amber-800 text-xs font-bold px-3 py-1 rounded-full mb-8">
+                        🔥 Hot This Week
+                    </div>
+
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <span class="text-3xl font-bold text-gray-200">01</span>
+                            <div>
+                                <p class="font-bold text-luxe-navy text-sm">Brazilian Body Wave</p>
+                                <p class="text-xs text-gray-500">1.2k+ Sold</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                             <span class="text-3xl font-bold text-gray-200">02</span>
+                             <div>
+                                <p class="font-bold text-luxe-navy text-sm">HD Lace Frontal</p>
+                                <p class="text-xs text-gray-500">950+ Sold</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                             <span class="text-3xl font-bold text-gray-200">03</span>
+                             <div>
+                                <p class="font-bold text-luxe-navy text-sm">Blonde 613 Bundle</p>
+                                <p class="text-xs text-gray-500">800+ Sold</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <a href="#" class="mt-8 inline-flex items-center text-luxe-navy font-bold text-sm hover:text-luxe-gold transition-colors group">
+                    View Top 100
+                    <svg class="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </a>
+            </div>
+
+            <!-- Right Product Grid -->
+            <div class="w-full lg:w-3/4">
+                <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
+                    <!-- Product Card 1 -->
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-3 border border-gray-100">
+                        <div class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                            <img src="" alt="Product 1" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-gray-900 font-medium text-sm truncate">Virgin Straight Hair Bundle</h3>
+                            <div class="flex items-center space-x-1">
+                                <div class="flex text-amber-400 text-xs">
+                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                </div>
+                                <span class="text-xs text-gray-400">(45)</span>
+                            </div>
+                            <div class="flex items-center justify-between mt-2">
+                                <span class="font-bold text-luxe-navy">$89.00</span>
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">150+ Sold</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 2 -->
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-3 border border-gray-100">
+                        <div class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                             <img src="" alt="Product 2" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-gray-900 font-medium text-sm truncate">Deep Wave Closure 4x4</h3>
+                            <div class="flex items-center space-x-1">
+                                <div class="flex text-amber-400 text-xs">
+                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                </div>
+                                <span class="text-xs text-gray-400">(28)</span>
+                            </div>
+                             <div class="flex items-center justify-between mt-2">
+                                <span class="font-bold text-luxe-navy">$120.00</span>
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">85 Sold</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 3 -->
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-3 border border-gray-100">
+                         <div class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                             <img src="" alt="Product 3" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-gray-900 font-medium text-sm truncate">Kinky Straight Wig 13x4</h3>
+                            <div class="flex items-center space-x-1">
+                                <div class="flex text-amber-400 text-xs">
+                                    <span>★</span><span>★</span><span>★</span><span>★</span><span class="text-gray-300">★</span>
+                                </div>
+                                <span class="text-xs text-gray-400">(123)</span>
+                            </div>
+                             <div class="flex items-center justify-between mt-2">
+                                <span class="font-bold text-luxe-navy">$350.00</span>
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">200+ Sold</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 4 -->
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-3 border border-gray-100">
+                         <div class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                             <img src="" alt="Product 4" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-gray-900 font-medium text-sm truncate">Water Wave Headband Wig</h3>
+                            <div class="flex items-center space-x-1">
+                                <div class="flex text-amber-400 text-xs">
+                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                </div>
+                                <span class="text-xs text-gray-400">(67)</span>
+                            </div>
+                             <div class="flex items-center justify-between mt-2">
+                                <span class="font-bold text-luxe-navy">$150.00</span>
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">300+ Sold</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 5 -->
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-3 border border-gray-100">
+                         <div class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                             <img src="" alt="Product 5" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-gray-900 font-medium text-sm truncate">Transparent Lace Glue</h3>
+                            <div class="flex items-center space-x-1">
+                                <div class="flex text-amber-400 text-xs">
+                                    <span>★</span><span>★</span><span>★</span><span>★</span><span>★</span>
+                                </div>
+                                <span class="text-xs text-gray-400">(512)</span>
+                            </div>
+                             <div class="flex items-center justify-between mt-2">
+                                <span class="font-bold text-luxe-navy">$25.00</span>
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">1k+ Sold</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Product Card 6 -->
+                     <div class="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow p-3 border border-gray-100">
+                         <div class="relative aspect-square rounded-lg overflow-hidden bg-gray-100 mb-3">
+                             <img src="" alt="Product 6" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+                        </div>
+                        <div class="space-y-1">
+                            <h3 class="text-gray-900 font-medium text-sm truncate">Silk Bonnet & Scarf Set</h3>
+                            <div class="flex items-center space-x-1">
+                                <div class="flex text-amber-400 text-xs">
+                                    <span>★</span><span>★</span><span>★</span><span>★</span><span class="text-gray-300">★</span>
+                                </div>
+                                <span class="text-xs text-gray-400">(89)</span>
+                            </div>
+                             <div class="flex items-center justify-between mt-2">
+                                <span class="font-bold text-luxe-navy">$45.00</span>
+                                <span class="text-xs text-gray-500 bg-gray-100 px-2 py-0.5 rounded">400+ Sold</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Why Choose Us Section -->
+<section class="min-h-[30vh] flex items-center py-10 bg-luxe-navy">
+    <div class="max-w-7xl mx-auto px-4 w-full">
+        <!-- Section Header -->
+        <div class="text-center mb-8">
+            <h2 class="font-playfair text-3xl md:text-4xl font-bold text-white mb-4">Why Choose LuxeHairs?</h2>
+            <div class="h-1 w-24 bg-amber-300 mx-auto rounded-full"></div>
+            <p class="mt-4 text-gray-300 max-w-2xl mx-auto">Experience the intersection of luxury, quality, and exceptional service.</p>
+        </div>
+
+        <!-- Benefits Grid -->
+        <div class="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-8 lg:gap-12">
+            <!-- Benefit 1: Premium Quality -->
+            <div class="text-center group p-4 md:p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300">
+                <div class="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 text-white mb-4 md:mb-6 group-hover:bg-amber-300 group-hover:text-luxe-navy transition-all duration-300">
+                     <!-- Diamond/Quality Icon -->
+                    <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-playfair text-lg md:text-xl font-bold text-luxe-gold mb-2 md:mb-3 group-hover:text-white transition-colors">Premium Quality</h3>
+                <p class="text-gray-300 text-xs md:text-sm leading-relaxed">
+                    Sourced from the finest donors, our 100% human hair wigs offer unmatched softness, shine, and longevity.
+                </p>
+            </div>
+
+            <!-- Benefit 2: Fast Shipping -->
+            <div class="text-center group p-4 md:p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300">
+                <div class="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 text-white mb-4 md:mb-6 group-hover:bg-amber-300 group-hover:text-luxe-navy transition-all duration-300">
+                     <!-- Truck/Shipping Icon -->
+                    <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-playfair text-lg md:text-xl font-bold text-luxe-gold mb-2 md:mb-3 group-hover:text-white transition-colors">Fast Shipping</h3>
+                <p class="text-gray-300 text-xs md:text-sm leading-relaxed">
+                    Enjoy swift 2-3 day delivery on all orders. We ensure your luxury arrives at your doorstep in record time.
+                </p>
+            </div>
+
+            <!-- Benefit 3: Secure Payment -->
+            <div class="text-center group p-4 md:p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300">
+                <div class="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 text-white mb-4 md:mb-6 group-hover:bg-amber-300 group-hover:text-luxe-navy transition-all duration-300">
+                    <!-- Shield/Secure Icon -->
+                    <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-playfair text-lg md:text-xl font-bold text-luxe-gold mb-2 md:mb-3 group-hover:text-white transition-colors">Secure Payment</h3>
+                <p class="text-gray-300 text-xs md:text-sm leading-relaxed">
+                    Shop with confidence using our 256-bit encrypted checkout. Your personal and financial data is always safe.
+                </p>
+            </div>
+
+            <!-- Benefit 4: 24/7 Support -->
+            <div class="text-center group p-4 md:p-6 rounded-2xl hover:bg-white/5 transition-colors duration-300">
+                 <div class="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-white/10 text-white mb-4 md:mb-6 group-hover:bg-amber-300 group-hover:text-luxe-navy transition-all duration-300">
+                    <!-- Headset/Support Icon -->
+                    <svg class="w-6 h-6 md:w-8 md:h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"></path>
+                    </svg>
+                </div>
+                <h3 class="font-playfair text-lg md:text-xl font-bold text-luxe-gold mb-2 md:mb-3 group-hover:text-white transition-colors">24/7 Support</h3>
+                <p class="text-gray-300 text-xs md:text-sm leading-relaxed">
+                    Our dedicated expert team is available around the clock to assist you with any questions or styling advice.
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+<!-- Infinite Scroll JS -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const track = document.getElementById('testimonial-track');
+        const container = document.getElementById('testimonial-container');
+        
+        // Clone the content to create infinite effect
+        const cards = Array.from(track.children);
+        cards.forEach(card => {
+            const clone = card.cloneNode(true);
+            track.appendChild(clone);
+        });
+
+        let scrollAmount = 0;
+        const speed = 1; // Pixels per frame
+        let isPaused = false;
+
+        function step() {
+            if (!isPaused) {
+                scrollAmount += speed;
+                
+                // If we've scrolled half the track (the length of the original content), reset to 0
+                if (scrollAmount >= track.scrollWidth / 2) {
+                    scrollAmount = 0;
+                }
+                
+                container.scrollLeft = scrollAmount;
+            }
+            requestAnimationFrame(step);
+        }
+
+        // Handle hover to pause
+        container.addEventListener('mouseenter', () => isPaused = true);
+        container.addEventListener('mouseleave', () => isPaused = false);
+
+        // Optional: Support touch pause
+        container.addEventListener('touchstart', () => isPaused = true);
+        container.addEventListener('touchend', () => isPaused = false);
+
+        // Start animation
+        requestAnimationFrame(step);
+    });
+</script>
+    </div>
+</section>
+
+</section>
+
+<!-- Instagram Feed Section -->
+<style>
+    @keyframes gradientFlow {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+    .insta-gradient-hover:hover {
+        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        background-size: 400% 400%;
+        animation: gradientFlow 3s ease infinite;
+        border-color: transparent;
+    }
+    .insta-text-gradient {
+        background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+    }
+</style>
+<section class="py-24 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <!-- Section Header -->
+        <div class="text-center mb-16">
+            <h2 class="font-playfair text-3xl md:text-5xl font-bold text-luxe-navy mb-4">Follow us on <span class="insta-text-gradient">Instagram</span></h2>
+            <a href="https://instagram.com/luxehairs" target="_blank" class="text-luxe-gold font-medium hover:text-luxe-navy transition-colors text-lg tracking-wide uppercase">@luxehairs</a>
+            <div class="h-1 w-24 bg-amber-300 mx-auto rounded-full mt-6"></div>
+        </div>
+
+        <!-- Pinterest Style Masonry Grid -->
+        <div class="columns-2 md:columns-3 lg:columns-4 gap-4 space-y-4">
+            <!-- Item 1 (Tall) -->
+            <div class="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-500">
+                <img src="" alt="LuxeHairs Doll 1" class="w-full aspect-[2/3] object-cover bg-gray-100 group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-luxe-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/30">View Post</span>
+                </div>
+            </div>
+
+            <!-- Item 2 (Square) -->
+            <div class="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-500">
+                <img src="" alt="LuxeHairs Doll 2" class="w-full aspect-square object-cover bg-gray-100 group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-luxe-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/30">View Post</span>
+                </div>
+            </div>
+
+            <!-- Item 3 (Medium) -->
+            <div class="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-500">
+                <img src="" alt="LuxeHairs Doll 3" class="w-full aspect-[4/5] object-cover bg-gray-100 group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-luxe-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/30">View Post</span>
+                </div>
+            </div>
+
+            <!-- Item 4 (Tall) -->
+            <div class="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-500">
+                <img src="" alt="LuxeHairs Doll 4" class="w-full aspect-[3/5] object-cover bg-gray-100 group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-luxe-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/30">View Post</span>
+                </div>
+            </div>
+
+            <!-- Item 5 (Medium) -->
+            <div class="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-500">
+                <img src="" alt="LuxeHairs Doll 5" class="w-full aspect-[3/4] object-cover bg-gray-100 group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-luxe-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/30">View Post</span>
+                </div>
+            </div>
+
+            <!-- Item 6 (Square) -->
+            <div class="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-500">
+                <img src="" alt="LuxeHairs Doll 6" class="w-full aspect-square object-cover bg-gray-100 group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-luxe-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/30">View Post</span>
+                </div>
+            </div>
+
+             <!-- Item 7 (Tall) -->
+             <div class="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-500">
+                <img src="" alt="LuxeHairs Doll 7" class="w-full aspect-[2/3] object-cover bg-gray-100 group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-luxe-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/30">View Post</span>
+                </div>
+            </div>
+
+             <!-- Item 8 (Square) -->
+             <div class="relative group overflow-hidden rounded-2xl break-inside-avoid shadow-sm hover:shadow-xl transition-all duration-500">
+                <img src="" alt="LuxeHairs Doll 8" class="w-full aspect-square object-cover bg-gray-100 group-hover:scale-110 transition-transform duration-700">
+                <div class="absolute inset-0 bg-luxe-navy/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                    <span class="text-white bg-white/20 backdrop-blur-md px-4 py-2 rounded-full text-xs font-bold uppercase tracking-widest border border-white/30">View Post</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="mt-16 text-center animate-bounce">
+            <a href="https://instagram.com/luxehairs" target="_blank" class="inline-flex items-center space-x-4 bg-luxe-navy text-white px-12 py-5 rounded-full font-bold uppercase tracking-[0.2em] insta-gradient-hover transition-transform duration-300 shadow-2xl hover:-translate-y-1 group">
+                <svg class="w-6 h-6 group-hover:rotate-12 transition-transform" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.584.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.791-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.209-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/>
+                </svg>
+                <span>Find Your Look</span>
+            </a>
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials / Client Love Section -->
+<section class="min-h-[30vh] flex flex-col justify-center py-10 bg-stone-50 overflow-hidden">
+    <div class="max-w-7xl mx-auto px-4 mb-6 text-center">
+        <h2 class="font-playfair text-3xl md:text-5xl font-bold text-luxe-navy mb-4">Luxe Dolls Love Us</h2>
+        <div class="h-1 w-24 bg-amber-300 mx-auto rounded-full mb-6"></div>
+        <p class="text-gray-500">Join thousands of confident women around the world.</p>
+    </div>
+
+    <!-- Scrolling Container Wrapper -->
+    <div id="testimonial-container" class="relative w-full overflow-hidden">
+        <!-- The Inner Track -->
+        <div id="testimonial-track" class="flex space-x-6 py-4 px-4 whitespace-nowrap">
+            <!-- Review 1 -->
+            <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 1" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Sarah M.</h4>
+                        <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"Absolutely in love with this wig! The texture is so soft and it looks incredibly natural. Worth every penny."</p>
+            </div>
+
+             <!-- Review 2 -->
+            <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 2" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Jessica K.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"Fast shipping and amazing quality. I've bought three wigs so far and they never disappoint!"</p>
+            </div>
+
+             <!-- Review 3 -->
+            <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 3" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Ashley R.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"The lace melted perfectly into my skin. Best HD lace I've ever worked with. Highly recommend!"</p>
+            </div>
+            
+            <!-- Review 4 -->
+            <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 4" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Michelle T.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"Customer service was so helpful in choosing the right length. The 24 inch body wave is stunning."</p>
+            </div>
+
+             <!-- Review 5 -->
+            <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 5" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Tiffany B.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"No shedding, no smell, just beautiful hair. I feel so confident wearing this unit."</p>
+            </div>
+
+            <!-- Review 6 -->
+             <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 6" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Courtney L.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"The color was exactly as pictured. The 613 blonde took color so well when I dyed it pink!"</p>
+            </div>
+
+             <!-- Review 7 -->
+             <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 7" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Amanda J.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"Luxe Hairs is my go-to now. The quality for the price is unbeatable. 10/10 recommendation."</p>
+            </div>
+
+             <!-- Review 8 -->
+             <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 8" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Dominique W.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"This wig holds curls for days! I wore it to my wedding and received so many compliments."</p>
+            </div>
+
+             <!-- Review 9 -->
+             <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 9" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Vanessa P.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"Finally found a company that sells thick, full bundles. The density is true to description."</p>
+            </div>
+
+            <!-- Review 10 -->
+             <div class="testimonial-card min-w-[300px] md:min-w-[350px] bg-white p-6 rounded-2xl shadow-sm border border-gray-100 inline-block whitespace-normal">
+                 <div class="flex items-center mb-4">
+                    <div class="w-12 h-12 rounded-full bg-gray-200 overflow-hidden mr-4">
+                        <img src="" alt="Customer 10" class="w-full h-full object-cover">
+                    </div>
+                    <div>
+                        <h4 class="font-bold text-luxe-navy">Kimberly S.</h4>
+                         <span class="text-xs text-green-600 flex items-center">
+                            <svg class="w-3 h-3 mr-1" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                            Verified Buyer
+                        </span>
+                    </div>
+                </div>
+                <div class="flex text-amber-400 mb-3 text-sm">★★★★★</div>
+                <p class="text-gray-600 italic text-sm">"Presentation was beautiful, hair is soft, and shipping was quick. I'll definitely be back!"</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Contact Us Section -->
+<section id="contact" class="py-12 bg-white relative overflow-hidden">
+    <!-- Decorative background elements -->
+    <div class="absolute top-0 right-0 -translate-y-1/2 translate-x-1/2 w-96 h-96 bg-amber-100 rounded-full blur-3xl opacity-30"></div>
+    <div class="absolute bottom-0 left-0 translate-y-1/2 -translate-x-1/2 w-96 h-96 bg-luxe-navy/5 rounded-full blur-3xl opacity-30"></div>
+
+    <div class="max-w-3xl mx-auto px-4 relative z-10">
+        <div class="text-center mb-10">
+            <h2 class="font-playfair text-3xl md:text-4xl font-bold text-luxe-navy mb-3">Book a Consultation</h2>
+            <p class="text-gray-500 max-w-lg mx-auto text-sm">Elevate your style with personalized luxury. Reach out to our experts for custom fittings, styling advice, or any inquiries.</p>
+            <div class="h-1 w-16 bg-amber-300 mx-auto rounded-full mt-4"></div>
+        </div>
+
+        <form action="#" method="POST" class="bg-white p-6 md:p-10 rounded-[2rem] shadow-[0_15px_40px_rgba(28,26,58,0.08)] border border-gray-100">
+            {% csrf_token %}
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-5">
+                <!-- Name -->
+                <div class="space-y-2">
+                    <label for="name" class="block text-xs font-black text-luxe-navy uppercase tracking-[0.2em] ml-1">Client Name</label>
+                    <input type="text" id="name" name="name" required 
+                           class="w-full px-5 py-3 bg-stone-50 border border-transparent rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-300 focus:bg-white transition-all duration-500 text-sm text-luxe-navy placeholder-gray-400"
+                           placeholder="Enter your name">
+                </div>
+                <!-- Email -->
+                <div class="space-y-2">
+                    <label for="email" class="block text-xs font-black text-luxe-navy uppercase tracking-[0.2em] ml-1">Email Address</label>
+                    <input type="email" id="email" name="email" required 
+                           class="w-full px-5 py-3 bg-stone-50 border border-transparent rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-300 focus:bg-white transition-all duration-500 text-sm text-luxe-navy placeholder-gray-400"
+                           placeholder="yourname@example.com">
+                </div>
+            </div>
+
+            <!-- Service Dropdown -->
+            <div class="mb-5 space-y-2">
+                <label for="service" class="block text-xs font-black text-luxe-navy uppercase tracking-[0.2em] ml-1">Requested Service</label>
+                <div class="relative">
+                    <select id="service" name="service" required
+                            class="w-full px-5 py-3 bg-stone-50 border border-transparent rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-300 focus:bg-white transition-all duration-500 text-sm text-luxe-navy appearance-none cursor-pointer">
+                        <option value="" disabled selected>Select the service you need</option>
+                        <option value="custom-wig">Premium Custom Wig Fitting</option>
+                        <option value="maintenance">Hair Maintenance & Restoration</option>
+                        <option value="styling">Expert Coloring & Styling</option>
+                        <option value="wholesale">Wholesale & Partnership</option>
+                        <option value="general">Concierge Support</option>
+                    </select>
+                    <div class="absolute right-5 top-1/2 -translate-y-1/2 pointer-events-none text-luxe-navy/50">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message -->
+            <div class="mb-8 space-y-2">
+                <label for="message" class="block text-xs font-black text-luxe-navy uppercase tracking-[0.2em] ml-1">Your Message</label>
+                <textarea id="message" name="message" rows="3" required
+                          class="w-full px-5 py-3 bg-stone-50 border border-transparent rounded-2xl focus:outline-none focus:ring-2 focus:ring-amber-300 focus:bg-white transition-all duration-500 text-sm text-luxe-navy resize-none placeholder-gray-400"
+                          placeholder="Tell us about your requirements..."></textarea>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="text-center">
+                <button type="submit" 
+                        class="contact-submit-btn inline-flex items-center space-x-3 bg-luxe-navy text-white px-8 py-4 rounded-full font-bold uppercase tracking-[0.2em] text-sm overflow-hidden group">
+                    <span class="relative z-10">Send Request</span>
+                    <svg class="w-4 h-4 relative z-10 group-hover:translate-x-1 transition-transform duration-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path>
+                    </svg>
+                </button>
+            </div>
+        </form>
+    </div>
+
+
+    <!-- Soft Animation Styles -->
+    <style>
+        .contact-submit-btn {
+            position: relative;
+            background: linear-gradient(45deg, #1C1A3A, #2D2B5A, #1C1A3A);
+            background-size: 200% 200%;
+            transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
+            box-shadow: 0 10px 20px rgba(28, 26, 58, 0.2);
+        }
+
+        .contact-submit-btn:hover {
+            transform: translateY(-5px);
+            background-position: 100% 0;
+            box-shadow: 0 15px 30px rgba(212, 175, 55, 0.25);
+            color: #D4AF37;
+        }
+
+        .contact-submit-btn::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
+            transition: 0.8s;
+        }
+
+        .contact-submit-btn:hover::after {
+            left: 100%;
+            transition: 0.8s;
+        }
+
+        .contact-submit-btn:active {
+            transform: translateY(-2px);
+        }
+    </style>
+</section>
+
+
+{% endblock %}
